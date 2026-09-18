@@ -1,0 +1,195 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --cardinal: #7a1f2b;
+  --cardinal-dark: #54151e;
+  --text: #2d2d2d;
+  --muted: #666;
+  --border: rgba(60, 45, 30, 0.22);
+  --platinum-bg: rgba(250, 250, 248, 0.96);
+  --gold-bg: rgba(255, 248, 214, 0.96);
+  --silver-bg: rgba(242, 244, 246, 0.96);
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--text);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.16)),
+    url("../dev-assets/court_bg.jpg") repeat;
+  background-size: 291px 173px;
+}
+
+.sponsor-app {
+  width: min(1100px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-header h1 {
+  color: var(--cardinal);
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 6px 0 4px;
+}
+
+.dev-badge {
+  display: inline-block;
+  margin: 0;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--cardinal);
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.season-label {
+  margin: 0;
+  color: var(--cardinal-dark);
+  font-weight: 700;
+}
+
+.status {
+  max-width: 620px;
+  margin: 32px auto;
+  padding: 18px;
+  text-align: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+}
+
+.status-error {
+  color: #7a1f2b;
+  font-weight: 700;
+}
+
+.sponsor-levels {
+  display: grid;
+  gap: 24px;
+}
+
+.sponsor-level {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(1px);
+}
+
+.level-platinum {
+  background: var(--platinum-bg);
+}
+
+.level-gold {
+  background: var(--gold-bg);
+}
+
+.level-silver {
+  background: var(--silver-bg);
+}
+
+.level-title {
+  margin: 0 0 14px;
+  color: var(--cardinal);
+  text-align: center;
+  font-size: 1.45rem;
+}
+
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.sponsor-card {
+  min-height: 150px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.93);
+  color: var(--text);
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sponsor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.13);
+}
+
+.sponsor-logo {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: 82px;
+  object-fit: contain;
+}
+
+.sponsor-name {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.logo-missing .sponsor-name {
+  font-size: 1.15rem;
+}
+
+.level-platinum .sponsor-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.level-platinum .sponsor-card {
+  min-height: 190px;
+}
+
+.level-platinum .sponsor-logo {
+  height: 110px;
+}
+
+@media (max-width: 600px) {
+  .sponsor-app {
+    width: min(100% - 18px, 1100px);
+    padding-top: 16px;
+  }
+
+  .sponsor-level {
+    padding: 12px;
+  }
+
+  .sponsor-grid,
+  .level-platinum .sponsor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sponsor-card,
+  .level-platinum .sponsor-card {
+    min-height: 145px;
+  }
+
+  .sponsor-logo,
+  .level-platinum .sponsor-logo {
+    height: 82px;
+  }
+}

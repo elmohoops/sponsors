@@ -1,1 +1,32 @@
-hello world!
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>El Modena Basketball Sponsors - DEV</title>
+  <meta name="description" content="El Modena Boys Basketball Sponsors">
+
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <main class="sponsor-app">
+    <header class="app-header">
+      <p class="dev-badge">DEV</p>
+      <h1>Our Sponsors</h1>
+      <p class="season-label" id="season-label">Loading sponsor season…</p>
+    </header>
+
+    <section id="status" class="status" aria-live="polite">
+      Loading sponsors…
+    </section>
+
+    <section id="sponsor-levels" class="sponsor-levels" hidden></section>
+  </main>
+
+  <script src="./js/config.js"></script>
+  <script src="./js/utils.js"></script>
+  <script src="./js/model.js"></script>
+  <script src="./js/renderer.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

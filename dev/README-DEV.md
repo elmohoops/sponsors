@@ -14,3 +14,10 @@
 
 ## Install
 Replace the repository's existing `/dev/` folder contents with the contents of this `/dev/` folder, then allow GitHub Pages to redeploy.
+
+
+## 9/18 visual refinement
+- Sponsor level headings use Kelly Slab at 48px on desktop.
+- Added gold divider line beneath each level heading.
+- Increased vertical spacing between sponsor levels.
+- Existing carousel behavior and sponsor data logic are unchanged.

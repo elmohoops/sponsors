@@ -33,7 +33,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 58px;
 }
 
 .level {
@@ -43,11 +43,23 @@ body {
 
 .level h2 {
   color: var(--cardinal);
-  font-size: clamp(30px, 5vw, 39px);
-  line-height: 1.02;
-  letter-spacing: 0.03em;
+  font-family: "Kelly Slab", Georgia, "Times New Roman", serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.015em;
   text-transform: uppercase;
-  margin: 0 0 10px;
+  margin: 0 0 28px;
+}
+
+.level h2::after {
+  content: "";
+  display: block;
+  width: min(400px, 72%);
+  height: 4px;
+  margin: 20px auto 0;
+  border-radius: 2px;
+  background: #f2cf00;
 }
 
 .carousel {
@@ -199,11 +211,17 @@ body {
     padding-top: 16px;
   }
 
-  #levels { gap: 22px; }
+  #levels { gap: 44px; }
 
   .level h2 {
-    font-size: clamp(26px, 7vw, 34px);
-    margin-bottom: 9px;
+    font-size: 38px;
+    margin-bottom: 22px;
+  }
+
+  .level h2::after {
+    width: min(320px, 74%);
+    height: 3px;
+    margin-top: 15px;
   }
 
   .carousel {

@@ -247,6 +247,7 @@ body {
   .card strong,
   .level.gold strong,
   .level.silver strong { font-size: 15px; }
+  .card img { max-width: 82%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

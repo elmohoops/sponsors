@@ -3,7 +3,6 @@ import { load, objects, configuration } from "./sheets.js";
 
 const levelsEl = document.querySelector("#levels");
 const status = document.querySelector("#status");
-const seasonEl = document.querySelector("#season");
 const timers = new Set();
 const ANIMATION_MS = 900;
 
@@ -50,11 +49,12 @@ function levelView(cfg, list, showName) {
   const view = document.createElement("div");
   const dots = document.createElement("div");
 
-  previous.textContent = "‹";
-  next.textContent = "›";
+  previous.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>`;
+  next.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>`;
   previous.ariaLabel = `Previous ${cfg.level} sponsor`;
   next.ariaLabel = `Next ${cfg.level} sponsor`;
-  previous.className = next.className = "arrow";
+  previous.className = "arrow arrow-prev";
+  next.className = "arrow arrow-next";
   view.className = "viewport";
   dots.className = "dots";
 
@@ -162,8 +162,6 @@ try {
   const { settings, levels } = configuration(configurationRows);
   const currentSeason = settings.CurrentSeason;
   const showName = yes(settings.ShowSponsorName);
-
-  seasonEl.textContent = currentSeason ? `Season ${currentSeason}` : "";
 
   const activeSponsors = sponsors.filter(
     sponsor => sponsor.Season === currentSeason && yes(sponsor.Active)

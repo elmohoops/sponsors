@@ -111,13 +111,15 @@ body {
   font-size: 1.45rem;
 }
 
-.sponsor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 14px;
+.sponsor-stage {
+  position: relative;
+  min-height: 150px;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .sponsor-card {
+  width: 100%;
   min-height: 150px;
   padding: 16px;
   display: flex;
@@ -131,7 +133,10 @@ body {
   color: var(--text);
   text-decoration: none;
   text-align: center;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.4s ease;
 }
 
 .sponsor-card:hover {
@@ -141,7 +146,7 @@ body {
 
 .sponsor-logo {
   display: block;
-  max-width: 100%;
+  max-width: min(100%, 520px);
   width: auto;
   height: 82px;
   object-fit: contain;
@@ -156,16 +161,45 @@ body {
   font-size: 1.15rem;
 }
 
-.level-platinum .sponsor-grid {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
+.level-platinum .sponsor-stage,
 .level-platinum .sponsor-card {
   min-height: 190px;
 }
 
 .level-platinum .sponsor-logo {
   height: 110px;
+  max-width: min(100%, 620px);
+}
+
+/* The outgoing card stays in place while the next sponsor gently fades/slides in. */
+.sponsor-card-exit {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(-14px);
+  pointer-events: none;
+}
+
+.sponsor-card-enter {
+  opacity: 0;
+  transform: translateX(14px);
+}
+
+.sponsor-card-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-card {
+    transition: none;
+  }
+
+  .sponsor-card-exit,
+  .sponsor-card-enter,
+  .sponsor-card-enter-active {
+    transform: none;
+  }
 }
 
 @media (max-width: 600px) {
@@ -178,12 +212,9 @@ body {
     padding: 12px;
   }
 
-  .sponsor-grid,
-  .level-platinum .sponsor-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .sponsor-stage,
   .sponsor-card,
+  .level-platinum .sponsor-stage,
   .level-platinum .sponsor-card {
     min-height: 145px;
   }
@@ -191,5 +222,6 @@ body {
   .sponsor-logo,
   .level-platinum .sponsor-logo {
     height: 82px;
+    max-width: 100%;
   }
 }

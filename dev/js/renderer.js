@@ -2,6 +2,7 @@ window.SponsorRenderer = (() => {
   const status = document.getElementById("status");
   const levelsContainer = document.getElementById("sponsor-levels");
   const seasonLabel = document.getElementById("season-label");
+  const timers = [];
 
   function setStatus(message, isError = false) {
     status.textContent = message;
@@ -11,6 +12,11 @@ window.SponsorRenderer = (() => {
 
   function clearStatus() {
     status.hidden = true;
+  }
+
+  function clearTimers() {
+    timers.forEach(timer => window.clearInterval(timer));
+    timers.length = 0;
   }
 
   function levelClass(levelName) {
@@ -33,7 +39,6 @@ window.SponsorRenderer = (() => {
       img.className = "sponsor-logo";
       img.src = sponsor.logo;
       img.alt = sponsor.name;
-      img.loading = "lazy";
 
       img.addEventListener("error", () => {
         img.hidden = true;
@@ -51,6 +56,10 @@ window.SponsorRenderer = (() => {
     return card;
   }
 
+  function randomStartIndex(length) {
+    return length > 1 ? Math.floor(Math.random() * length) : 0;
+  }
+
   function createLevelSection(level) {
     const section = document.createElement("section");
     section.className = `sponsor-level ${levelClass(level.name)}`;
@@ -60,18 +69,52 @@ window.SponsorRenderer = (() => {
     heading.textContent = `${level.name} Sponsors`;
     section.appendChild(heading);
 
-    const grid = document.createElement("div");
-    grid.className = "sponsor-grid";
+    const stage = document.createElement("div");
+    stage.className = "sponsor-stage";
+    stage.setAttribute("aria-live", "off");
+    section.appendChild(stage);
 
-    level.sponsors.forEach(sponsor => {
-      grid.appendChild(createSponsorCard(sponsor));
-    });
+    let currentIndex = randomStartIndex(level.sponsors.length);
 
-    section.appendChild(grid);
+    function showSponsor(index, animate = false) {
+      const nextCard = createSponsorCard(level.sponsors[index]);
+
+      if (!animate || !stage.firstElementChild) {
+        stage.replaceChildren(nextCard);
+        return;
+      }
+
+      const oldCard = stage.firstElementChild;
+      oldCard.classList.add("sponsor-card-exit");
+      nextCard.classList.add("sponsor-card-enter");
+      stage.appendChild(nextCard);
+
+      requestAnimationFrame(() => {
+        nextCard.classList.add("sponsor-card-enter-active");
+      });
+
+      window.setTimeout(() => {
+        oldCard.remove();
+        nextCard.classList.remove("sponsor-card-enter", "sponsor-card-enter-active");
+      }, 450);
+    }
+
+    showSponsor(currentIndex);
+
+    if (level.sponsors.length > 1) {
+      const seconds = Math.max(1, Number(level.rotationSeconds) || 5);
+      const timer = window.setInterval(() => {
+        currentIndex = (currentIndex + 1) % level.sponsors.length;
+        showSponsor(currentIndex, true);
+      }, seconds * 1000);
+      timers.push(timer);
+    }
+
     return section;
   }
 
   function render(configuration, levels) {
+    clearTimers();
     seasonLabel.textContent = `Season ${configuration.currentSeason}`;
     levelsContainer.replaceChildren();
 

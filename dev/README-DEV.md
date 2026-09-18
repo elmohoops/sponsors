@@ -1,26 +1,24 @@
-# Sponsors DEV build
+# Sponsors DEV build — Carousel v0.2
 
-Initial Sponsor app milestone.
+## Carousel behavior
+- Displays one sponsor at a time for each configured level.
+- Each level starts on a random sponsor on every page load.
+- Rotation then follows the Google Sheet `Order` values and wraps continuously.
+- Each level rotates independently.
+- Rotation timing comes from `Configuration > Rotation Seconds`.
+- Levels with only one sponsor remain static.
+- Uses a subtle fade/slide transition.
+- Respects the browser's reduced-motion preference.
 
-## Included
-- Reads the published Sponsor and Configuration Google Sheet CSV feeds.
-- Reads `CurrentSeason` from Configuration.
-- Filters Sponsor rows to the current season and `Active = TRUE`.
-- Uses Configuration to order Platinum, Gold, and Silver levels.
-- Displays static sponsor cards (no carousel yet).
-- Platinum has a larger visual treatment.
-- Level backgrounds are intentionally different for visual testing.
-- Uses the Wix basketball-court image from `dev-assets/court_bg.jpg`.
-- The court image is DEV-only by design.
-
-## Logo files
-The Google Sheet currently contains paths such as:
-
-`assets/SP_Longevity.png`
-
-Copy the existing sponsor logo files into this package's `assets/` folder using the exact filenames in the Sheet.
-
-Until those files are added, the app will still show each sponsor's name.
+## Existing behavior retained
+- Reads Sponsor and Configuration Google Sheet CSV feeds.
+- Uses `CurrentSeason`.
+- Filters to current-season rows where `Active = TRUE`.
+- Uses configured level display order.
+- Platinum remains larger than Gold and Silver.
+- Tier background treatments are retained.
+- DEV-only basketball-court background remains in `dev-assets/court_bg.jpg`.
 
 ## Install
 Upload the **contents** of this folder into the repository's existing `/dev/` folder.
+Keep your existing `/dev/assets/` sponsor logo files; this ZIP intentionally does not replace them.

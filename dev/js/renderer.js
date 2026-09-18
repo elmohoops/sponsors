@@ -2,7 +2,8 @@ window.SponsorRenderer = (() => {
   const status = document.getElementById("status");
   const levelsContainer = document.getElementById("sponsor-levels");
   const seasonLabel = document.getElementById("season-label");
-  const timers = [];
+  const timers = new Set();
+  const ANIMATION_MS = 850;
 
   function setStatus(message, isError = false) {
     status.textContent = message;
@@ -16,7 +17,7 @@ window.SponsorRenderer = (() => {
 
   function clearTimers() {
     timers.forEach(timer => window.clearInterval(timer));
-    timers.length = 0;
+    timers.clear();
   }
 
   function levelClass(levelName) {
@@ -39,12 +40,10 @@ window.SponsorRenderer = (() => {
       img.className = "sponsor-logo";
       img.src = sponsor.logo;
       img.alt = sponsor.name;
-
       img.addEventListener("error", () => {
         img.hidden = true;
         card.classList.add("logo-missing");
       });
-
       card.appendChild(img);
     }
 
@@ -52,8 +51,16 @@ window.SponsorRenderer = (() => {
     name.className = "sponsor-name";
     name.textContent = sponsor.name;
     card.appendChild(name);
-
     return card;
+  }
+
+  function createArrow(direction, levelName) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `carousel-arrow carousel-arrow-${direction}`;
+    button.textContent = direction === "previous" ? "‹" : "›";
+    button.setAttribute("aria-label", `${direction === "previous" ? "Previous" : "Next"} ${levelName} sponsor`);
+    return button;
   }
 
   function randomStartIndex(length) {
@@ -69,45 +76,97 @@ window.SponsorRenderer = (() => {
     heading.textContent = `${level.name} Sponsors`;
     section.appendChild(heading);
 
+    const carousel = document.createElement("div");
+    carousel.className = "sponsor-carousel";
+    section.appendChild(carousel);
+
     const stage = document.createElement("div");
     stage.className = "sponsor-stage";
     stage.setAttribute("aria-live", "off");
-    section.appendChild(stage);
 
     let currentIndex = randomStartIndex(level.sponsors.length);
+    let timer = null;
+    let animating = false;
 
-    function showSponsor(index, animate = false) {
+    function showSponsor(index, direction = "next", animate = false) {
+      if (animating) return false;
       const nextCard = createSponsorCard(level.sponsors[index]);
 
-      if (!animate || !stage.firstElementChild) {
+      if (!animate || !stage.firstElementChild || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         stage.replaceChildren(nextCard);
-        return;
+        currentIndex = index;
+        return true;
       }
 
+      animating = true;
       const oldCard = stage.firstElementChild;
-      oldCard.classList.add("sponsor-card-exit");
-      nextCard.classList.add("sponsor-card-enter");
+      const forward = direction === "next";
+
+      oldCard.classList.add("sponsor-card-moving", forward ? "exit-left" : "exit-right");
+      nextCard.classList.add("sponsor-card-moving", forward ? "enter-right" : "enter-left");
       stage.appendChild(nextCard);
 
       requestAnimationFrame(() => {
-        nextCard.classList.add("sponsor-card-enter-active");
+        requestAnimationFrame(() => {
+          oldCard.classList.add("slide-active");
+          nextCard.classList.add("slide-active");
+        });
       });
 
       window.setTimeout(() => {
         oldCard.remove();
-        nextCard.classList.remove("sponsor-card-enter", "sponsor-card-enter-active");
-      }, 450);
+        nextCard.classList.remove("sponsor-card-moving", "enter-right", "enter-left", "slide-active");
+        currentIndex = index;
+        animating = false;
+      }, ANIMATION_MS + 40);
+
+      return true;
+    }
+
+    function stopTimer() {
+      if (timer !== null) {
+        window.clearInterval(timer);
+        timers.delete(timer);
+        timer = null;
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      if (level.sponsors.length <= 1) return;
+      const seconds = Math.max(1, Number(level.rotationSeconds) || 5);
+      timer = window.setInterval(() => {
+        if (animating) return;
+        const nextIndex = (currentIndex + 1) % level.sponsors.length;
+        showSponsor(nextIndex, "next", true);
+      }, seconds * 1000);
+      timers.add(timer);
+    }
+
+    function advance(direction) {
+      if (animating) return;
+      const count = level.sponsors.length;
+      const nextIndex = direction === "next"
+        ? (currentIndex + 1) % count
+        : (currentIndex - 1 + count) % count;
+
+      if (showSponsor(nextIndex, direction, true)) {
+        startTimer();
+      }
     }
 
     showSponsor(currentIndex);
 
     if (level.sponsors.length > 1) {
-      const seconds = Math.max(1, Number(level.rotationSeconds) || 5);
-      const timer = window.setInterval(() => {
-        currentIndex = (currentIndex + 1) % level.sponsors.length;
-        showSponsor(currentIndex, true);
-      }, seconds * 1000);
-      timers.push(timer);
+      const previous = createArrow("previous", level.name);
+      const next = createArrow("next", level.name);
+      previous.addEventListener("click", () => advance("previous"));
+      next.addEventListener("click", () => advance("next"));
+      carousel.append(previous, stage, next);
+      startTimer();
+    } else {
+      carousel.classList.add("single-sponsor");
+      carousel.appendChild(stage);
     }
 
     return section;
@@ -124,10 +183,7 @@ window.SponsorRenderer = (() => {
       return;
     }
 
-    levels.forEach(level => {
-      levelsContainer.appendChild(createLevelSection(level));
-    });
-
+    levels.forEach(level => levelsContainer.appendChild(createLevelSection(level)));
     clearStatus();
     levelsContainer.hidden = false;
   }

@@ -110,22 +110,24 @@ body {
 .card.gold { background: #fff7cff7; }
 .card.silver { background: #fce8eaf7; }
 
+.level.platinum { --logo-max-width: 300px; --logo-max-height: 135px; }
+.level.gold { --logo-max-width: 235px; --logo-max-height: 105px; }
+.level.silver { --logo-max-width: 195px; --logo-max-height: 85px; }
+
 .card img {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
+  max-width: min(100%, var(--logo-max-width));
+  max-height: var(--logo-max-height);
   object-fit: contain;
   object-position: center;
   margin-inline: auto;
   align-self: center;
-  flex: 1;
+  flex: 0 1 auto;
+  min-width: 0;
   min-height: 0;
 }
-
-.level.platinum img { max-width: 300px; max-height: 135px; }
-.level.gold img { max-width: 235px; max-height: 105px; }
-.level.silver img { max-width: 195px; max-height: 85px; }
 
 .card strong {
   font-size: 18px;
@@ -247,7 +249,9 @@ body {
   .card strong,
   .level.gold strong,
   .level.silver strong { font-size: 15px; }
-  .card img { max-width: 82%; }
+  /* Logo sizing remains tier-specific, but can never exceed the card's
+     available content width on small screens. */
+  .card img { max-width: min(100%, var(--logo-max-width)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

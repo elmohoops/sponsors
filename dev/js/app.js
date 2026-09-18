@@ -135,14 +135,16 @@ function levelView(cfg, list, showName) {
   previous.onclick = () => move(-1, true);
   next.onclick = () => move(1, true);
 
-  carousel.append(previous, view, next);
+  if (list.length > 1) {
+    carousel.append(previous, view, next);
+  } else {
+    carousel.classList.add("single");
+    carousel.append(view);
+  }
   section.append(carousel);
 
   if (list.length > 1) {
     section.append(dots);
-  } else {
-    previous.hidden = true;
-    next.hidden = true;
   }
 
   initial();

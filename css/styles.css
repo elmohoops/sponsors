@@ -1,0 +1,262 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+
+:root {
+  --cardinal: #8b1e2d;
+  --gold: #d5ad38;
+  --text: #2b2623;
+  --shadow: 0 6px 16px #432b1824;
+  --arrow-shadow: 0 4px 10px #00000018;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--text);
+  background: transparent;
+  margin: 0;
+  min-height: 100%;
+  background-color: transparent;
+}
+
+.app {
+  width: min(760px, calc(100% - 24px));
+  margin: auto;
+  padding: 28px 0 38px;
+  text-align: center;
+}
+
+#status {
+  background: #fffffff0;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+#levels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 58px;
+}
+
+.level {
+  width: 100%;
+  background: transparent;
+}
+
+.level h2 {
+  color: var(--cardinal);
+  font-family: "Kelly Slab", Georgia, "Times New Roman", serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  margin: 0 0 28px;
+}
+
+.level h2::after {
+  content: "";
+  display: block;
+  width: min(400px, 72%);
+  height: 4px;
+  margin: 20px auto 0;
+  border-radius: 2px;
+  background: #f2cf00;
+}
+
+.carousel {
+  display: grid;
+  grid-template-columns: 46px auto 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.carousel.single {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.carousel.single .viewport {
+  margin-inline: auto;
+}
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.level.platinum .viewport { width: 420px; height: 205px; }
+.level.gold .viewport { width: 340px; height: 170px; }
+.level.silver .viewport { width: 285px; height: 145px; }
+
+.card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 20px;
+  border: 1px solid #48352729;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1), opacity 900ms ease;
+}
+
+.card.platinum { background: #fffffff7; }
+.card.gold { background: #fff7cff7; }
+.card.silver { background: #fce8eaf7; }
+
+.level.platinum { --logo-max-width: 300px; --logo-max-height: 135px; }
+.level.gold { --logo-max-width: 235px; --logo-max-height: 105px; }
+.level.silver { --logo-max-width: 195px; --logo-max-height: 85px; }
+
+.card img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, var(--logo-max-width));
+  max-height: var(--logo-max-height);
+  object-fit: contain;
+  object-position: center;
+  margin-inline: auto;
+  align-self: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.card strong {
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.level.gold strong { font-size: 17px; }
+.level.silver strong { font-size: 16px; }
+
+.arrow {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #8b1e2d2f;
+  border-radius: 999px;
+  background: #fffffff2;
+  color: var(--cardinal);
+  box-shadow: var(--arrow-shadow);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.arrow:hover {
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px #00000022;
+}
+
+.arrow:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px #00000020;
+}
+
+.arrow:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 3.25;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
+.arrow-prev svg { transform: translateX(-0.5px); }
+.arrow-next svg { transform: translateX(0.5px); }
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  min-height: 7px;
+}
+
+.dots i {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4b3a472e;
+}
+
+.dots i.active { background: var(--cardinal); }
+
+.from-right { transform: translateX(108%); opacity: .55; }
+.from-left { transform: translateX(-108%); opacity: .55; }
+.arrive { transform: translateX(0); opacity: 1; }
+.to-left { transform: translateX(-108%); opacity: .55; }
+.to-right { transform: translateX(108%); opacity: .55; }
+
+@media (max-width: 600px) {
+  .app {
+    width: min(100% - 14px, 520px);
+    padding-top: 16px;
+  }
+
+  #levels { gap: 44px; }
+
+  .level h2 {
+    font-size: 38px;
+    margin-bottom: 22px;
+  }
+
+  .level h2::after {
+    width: min(320px, 74%);
+    height: 3px;
+    margin-top: 15px;
+  }
+
+  .carousel {
+    grid-template-columns: 38px auto 38px;
+    gap: 5px;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .level.platinum .viewport { width: min(70vw, 360px); height: 180px; }
+  .level.gold .viewport { width: min(63vw, 300px); height: 155px; }
+  .level.silver .viewport { width: min(57vw, 250px); height: 135px; }
+
+  .card { padding: 13px 15px; }
+  .card strong,
+  .level.gold strong,
+  .level.silver strong { font-size: 15px; }
+  /* Logo sizing remains tier-specific, but can never exceed the card's
+     available content width on small screens. */
+  .card img { max-width: min(100%, var(--logo-max-width)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition-duration: 1ms; }
+  .arrow { transition: none; }
+}

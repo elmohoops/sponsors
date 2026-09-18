@@ -1,0 +1,1 @@
+export const CONFIG={base:"https://docs.google.com/spreadsheets/d/e/2PACX-1vT0a6k10mE9ro5gamtWn5-G3Ig_O3z45sCIOeqEGalOB3TN9QDWd0b-jtzs15p7aLkLt478OOlXCCDf/pub",sheets:{Sponsor:0,Configuration:645605296},defaultRotationSeconds:5};

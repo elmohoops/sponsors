@@ -1,0 +1,5 @@
+import{CONFIG}from"./config.js";
+function parseCsv(t){let a=[],r=[],c="",q=false;for(let i=0;i<t.length;i++){let x=t[i];if(q){if(x=='"'&&t[i+1]=='"'){c+='"';i++}else if(x=='"')q=false;else c+=x}else if(x=='"')q=true;else if(x==","){r.push(c);c=""}else if(x=="\n"){r.push(c);a.push(r);r=[];c=""}else if(x!="\r")c+=x}r.push(c);if(r.some(Boolean))a.push(r);return a}
+export async function load(gid){const cacheBust=Date.now();let r=await fetch(`${CONFIG.base}?output=csv&gid=${gid}&_=${cacheBust}`,{cache:"no-store"});if(!r.ok)throw Error("Sheet request failed");return parseCsv(await r.text())}
+export function objects(rows){let h=rows[0].map(x=>x.trim());return rows.slice(1).filter(r=>r.some(x=>String(x).trim())).map(r=>Object.fromEntries(h.map((x,i)=>[x,(r[i]??"").trim()])))}
+export function configuration(rows){let settings={},levels=[];for(let i=1;i<rows.length;i++){let[a="",b="",c=""]=rows[i].map(x=>String(x).trim());if(a&&b&&i<12)settings[a]=b;if(i>=13&&a&&a.toLowerCase()!="level")levels.push({level:a,displayOrder:+b||999,rotationSeconds:+c||CONFIG.defaultRotationSeconds})}return{settings,levels:levels.sort((a,b)=>a.displayOrder-b.displayOrder)}}
